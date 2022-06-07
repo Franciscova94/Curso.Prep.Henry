@@ -1,49 +1,134 @@
-<img  src='./logo.png' height='70px'>
+# Lab de Azure App Service
 
-## Introducción
+**Azure App Service** es un servicio PaaS que te permite  crear aplicaciones web que se pueden desplegar en el internet público.
 
-# Modulo 0 - Prep
+Puede ser usado para realizar:
+- Aplicaciones web
+- API RESTful
+- Backend de aplicaciones web
+- Backend de aplicaciones móviles
+- Backend de aplicaciones de escritorio
+- Enter otros
 
-* [00 - Primeros Pasos](./00-PrimerosPasos)
-* [01 - Git](./01-Git)
-* [02 - I - Introducción a Javascript: Variables, tipos de datos y funciones](./02-JS-I)
-* [03 - II- Flujos de control, operadores de comparación, bucles for](./03-JS-II)
-* [04 - III - continuación de bucles for y Arrays](./04-JS-III)
-* [05 - IV - Objetos](./05-JS-IV)
-* [06 - V - Clases y prototype](./06-JS-V)
-* [07 - VI - Callbacks](./07-JS-VI)
-* [08 - HTML](./08-HTML)
-* [09 - CSS](./09-CSS-Positioning)
-* Henry Challenge => [Inscribite acá para rendir](https://challenge.prep.soyhenry.com/)
+**Curiosidad:** Casi todo el código de las prácticas es funcional y fue generado con [GitHub Copilot](https://copilot.github.com/).
 
-## Conceptos:
+## Requerimientos
+- [CLI de Azure](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+- [Git](https://git-scm.com/downloads)
+- [Cuenta de GitHub](https://github.com/)
+- [Node.js](https://nodejs.org/es/download/)
 
-* [Expressions vs Statements](./JS-conceptos/Statements-Expressions/)
+## Práctica 1: Despliegue de una aplicación web en PHP
 
-## Clases de Repaso (Henry Heroes)
+1. Copia el código de la webapp ejemplo que se encuentra en [pagina-php](/pagina-php)
+    - Aquí tienes dos archivos  `index.php` y `test.php`
+2. Crea una carpeta aparte y pega el código en un archivo nuevo.
+   - Debes tener un archivo `index.php`
 
-Estudiantes mas avanzados de la carrera resuelven los ejercicios en vivo en formato webinar.
-[Acá podes](https://docs.google.com/spreadsheets/d/e/2PACX-1vQwV-pEgWuxqI1B3pdVI0lbeqPB0a6LHPk6-DQlifDdX9Rue_Ul4YTOxoOg-hhofv6U0f32OoXOU2Wf/pubhtml) ver el calendario de las clases y las grabaciones.
-
-## Homeworks
-
-__IMPORTANTE:__ Para ejecutar los tests de cada homework tenes que pararte en la carpeta donde clonaste tu repo (es decir la carpeta donde está este `README.md`) y ejecutar el siguiente comando:
-
-`npm install`
-
-Esto instalará todas las dependencias necesarias (lo tenés que hacer una sóla vez), una vez terminado y cada vez que quieras ver cuantos tests pasaste ejecutá:
-
-```
-npm test {nombre del homework}.test.js
+3. Inicia un repositorio de Git con el siguiente comando:
+```GitHub
+git init
 ```
 
-Por ejemplo, para ejecutar los tests del homework 02, ejecutar: `npm test JSII.test.js`
-el del homework 01: `npm test JSI.test.js`
-y así.
+4. Revisa el código de la página ejemplo
 
-> No todos los homeworks tiene tests, está detallado en la descripción de cada uno.
+5. Puedes probar la página instalando XAMP o similares
 
-# La Carrera
+6. [Sube el proyecto a App Service](#sube-el-proyecto-a-app-service)
+__________________
+## Práctica 2: Despliegue de una API en Node.js
+1. Copia el código de la API ejemplo que se encuentra en [api-nodejs](/api-nodejs)
+    - Aquí tienes el archivo `app.js` y `package.json`
+    - El archivo `package.json` es el que contiene la información de la aplicación y las librerías a instalar
+    - El archivio `app.js` es el que contiene la lógica de la aplicación y es el que se va a ejecutar
+2. Crea una carpeta aparte y pega el código en un archivo nuevo.
+   - Debes tener un archivo `app.js`
 
-Si querés saber más sobre la carrera, mirá este video:
-<iframe src="https://player.vimeo.com/video/426051769" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+3. Inicia un repositorio de Git con el siguiente comando:
+```GitHub
+git init
+```
+4. Inicia un proyecto de Node.js con el siguiente comando:
+```cmd
+npm init
+```
+
+5. Instala las librerías que necesitas
+```cmd
+npm install
+```
+6. Si se sobrescribió el archivo `package.json` copia y pega el de este proyecto
+7. Revisa el código de la API ejemplo
+8. Inicia el proyecto y prueba su funcionamiento
+```cmd
+npm start
+```
+9. Verifica su funcionamiento en aplicaciones como Talend API Tester o Postman
+
+- Si accedes a http://localhost:3000/ deberías ver el mensaje "Hola Mundo" y en la consola deberás ver "El servidor se está ejecutando en http://localhost:3000/"
+
+- Si envías una petición post con el parametro `name=Juan` deberías ver el mensaje "Juan" en la consola
+
+10. [Sube el proyecto a App Service](#sube-el-proyecto-a-app-service)
+
+_______
+
+## Sube el proyecto a App Service
+
+- Remplaza las \<LETRAS EN MAYUSCULAS Y DENTRO DE MAYOR Y MENOR QUE\> dependiendo de tus preferencias 
+
+1. Crea un plan de App Service. Puede hacerlo al crear un servicio de App Service desde el portal de Azure o usando la linea de comando CLI de Azure.
+
+```CLI de Azure
+az appservice plan create --name <NOMBRE_PLAN_APP_SERVICE> --resource-group <NOMBRE_GRUPO_DE_RECURSOS> --sku FREE
+```
+
+2. Crea el servicio de App Service. Igualmente puedes hacerlo como desees
+
+- Ajusta el parametro después de --runtime dependiendo del lenguaje de programación que estés usando. Por ejemplo, para PHP sería algo así `"PHP|7.4"`
+
+```CLI de Azure
+az webapp create -n <NOMBRE_APP_SERVICE> -g <NOMBRE_GRUPO_DE_RECURSOS> -p <NOMBRE_PLAN_APP_SERVICE> --runtime "node|10.6" --deployment-local-git
+```
+
+3. Si anteriormente no has establecido las credenciales de implementación de nivel de usuario o si no recuerdas tu contraseña, ejecuta el siguiente comando:
+
+
+```CLI de Azure
+az webapp deployment user set --user-name <USERNAME_GITHUB>
+```
+
+4. Obten la dirección de implementación de Git con:
+```CLI de Azure
+
+az webapp deployment source config-local-git -n <NOMBRE_APP_SERVICE> -g <NOMBRE_GRUPO_DE_RECURSOS>
+```
+
+5. Agrega el control remoto a tu código con:
+
+- **Nota**: a debes tener el repositorio local creado
+- **Nota**: Si falla la implementación cambia el código a la rama master con `git branch master ` y después `git checkout master`
+
+```cmd
+git remote add webapp <DIRECCION_IMPLEMENTACION_GIT>
+```
+
+6. Despliega la aplicación con:
+
+```cmd
+git push webapp main:main
+```
+
+- Nota: Si estás en la rama master el comando sería así:
+
+```cmd
+git push webapp master:master
+```
+
+7. cuando te aparezca el siguiente mensaje en la consola, significa que el deploy fue exitoso
+
+```cmd
+remote: Finished successfully.
+remote: Running post deployment command(s)...
+remote: Deployment successful.
+```
